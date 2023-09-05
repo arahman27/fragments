@@ -14,10 +14,10 @@ curl.exe (i.e, curl.exe http://localhost:8080 in Power Shell).
 Script terminal commands
 =========================================
 
-1. lint _Runs eslint to check errors_ = **npm run lint**
-2. start _Starts the server normally on port 8080_ = **npm start**
-3. dev _Watches the server for changes, restarts server if something updated_ = **npm run dev**
-4. debug _Starts node inspector on port 9229 for debugging purposes_ = **npm run debug**
+- lint (Runs eslint to check errors) = **npm run lint**
+- start (Starts the server normally on port 8080) = **npm start**
+- dev (Watches the server for changes, restarts server if something updated) = **npm run dev**
+- debug (Starts node inspector on port 9229 for debugging purposes) = **npm run debug**
 
 =========================================
 Additional notes
