@@ -22,6 +22,7 @@ Script terminal commands
 =========================================
 Additional notes
 =========================================
-*Ctrl + c to close running server
-*VSCode commit workflow: git status --> git add (changed files) --> git commit -m "Commit description"
-\*After completing everything push to GitHub: git push origin main
+
+- Ctrl + c to close running server
+- VSCode commit workflow: git status --> git add (changed files) --> git commit -m "Commit description"
+- After completing everything push to GitHub: git push origin main
