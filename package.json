@@ -11,5 +11,8 @@
     "url": "git+https://github.com/arahman27/fragments.git"
   },
   "author": "Aditya Rahman",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "prettier": "3.0.3"
+  }
 }
