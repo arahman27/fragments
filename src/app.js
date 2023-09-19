@@ -14,6 +14,9 @@ const pino = require('pino-http')({
   logger,
 });
 
+const passport = require('passport');
+const authenticate = require('./auth');
+
 // Create an express app instance we can use to attach middleware and HTTP routes
 const app = express();
 
@@ -28,6 +31,10 @@ app.use(cors());
 
 // Use gzip/deflate compression middleware
 app.use(compression());
+
+// Set up our passport authentication middleware
+passport.use(authenticate.strategy());
+app.use(passport.initialize());
 
 // Define our routes
 app.use('/', require('./routes'));
