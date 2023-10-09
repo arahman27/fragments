@@ -1,8 +1,10 @@
-/*const request = require('supertest');
+const request = require('supertest');
 
 const app = require('../../src/app');
 
-describe('GET /v1/fragments', () => {
-  test('Resources not found', () => request(app).get('').expect(404));
-
-});*/
+describe('/ App check', () => {
+  test('should return HTTP 404 response', async () => {
+    const res = await request(app).get('/ABC');
+    expect(res.statusCode).toBe(404);
+  });
+});
