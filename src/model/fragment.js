@@ -15,38 +15,38 @@ const {
 } = require('./data');
 
 class Fragment {
-  constructor({ id, ownerId, created = Date.now(), updated = Date.now(), type, size = 0 }) {
+  constructor({ id, ownerId, created = new Date(), updated = new Date(), type, size = 0 }) {
       this.type = '';
       this.id = randomUUID();
 
       if(ownerId == null && type == null){
         throw new Error();
       }
-      
-      if(type === 'text/plain' || type === 'text/plain; charset=utf-8'){
-        this.type = type;
-      }
       else{
-        throw new Error();
-      }
+        if(type === 'text/plain' || type === 'text/plain; charset=utf-8'){
+          this.type = type;
+        }
+        else{
+          throw new Error();
+        }
 
-      if(isNaN(size)){
-        throw new Error();
-      }
-      
-      if(size < 0){
-        throw new Error();
-      }
+        if(isNaN(size)){
+          throw new Error();
+        }
+        
+        if(size < 0){
+          throw new Error();
+        }
 
-      if(id != null){
-        this.id = id;
+        if(id != null){
+          this.id = id;
+        }
+
+        this.ownerId = ownerId;
+        this.size = size;
+        this.created = created;
+        this.updated = updated;
       }
-
-      this.ownerId = ownerId;
-      this.size = size;
-      this.created = created;
-      this.updated = updated;
-
   }
 
   /**
@@ -56,7 +56,7 @@ class Fragment {
    * @returns Promise<Array<Fragment>>
    */
   static async byUser(ownerId, expand = false) {
-    const fragments = listFragments(ownerId, expand);
+    const fragments = await listFragments(ownerId, expand);
 
     if (fragments.size == 0){
       return [];
@@ -73,10 +73,10 @@ class Fragment {
    * @returns Promise<Fragment>
    */
   static async byId(ownerId, id) {
-    const res =  readFragment(ownerId, id);
-    
+    const res =  await readFragment(ownerId, id);
+
     if(res == undefined){
-      throw new Error();
+      throw new Error;
     }
     else{
       return res;
@@ -98,7 +98,7 @@ class Fragment {
    * @returns Promise<void>
    */
   save() {
-    this.updated = Date.now();
+    this.updated = new Date();
     writeFragment(this);
   }
 
