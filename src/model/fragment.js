@@ -19,7 +19,7 @@ class Fragment {
       this.type = '';
       this.id = randomUUID();
 
-      if(ownerId == null && type == null){
+      if(ownerId == null || type == null){
         throw new Error();
       }
       else{
@@ -30,7 +30,7 @@ class Fragment {
           throw new Error();
         }
 
-        if(isNaN(size)){
+        if(typeof size == "string"){
           throw new Error();
         }
         
@@ -44,8 +44,8 @@ class Fragment {
 
         this.ownerId = ownerId;
         this.size = size;
-        this.created = created;
-        this.updated = updated;
+        this.created = created.toString();
+        this.updated = updated.toString();
       }
   }
 
@@ -98,7 +98,7 @@ class Fragment {
    * @returns Promise<void>
    */
   save() {
-    this.updated = new Date();
+    this.updated = new Date().toString();
     writeFragment(this);
   }
 
@@ -121,9 +121,9 @@ class Fragment {
     }
 
     this.size++;
-    this.save()
+    this.updated = new Date().toString();
 
-    writeFragmentData(this.ownerId, this.id, data);
+    await writeFragmentData(this.ownerId, this.id, data);
   }
 
   /**
@@ -154,7 +154,9 @@ class Fragment {
    * @returns {Array<string>} list of supported mime types
    */
   get formats() {
-    return this.mimeType();
+    const arr = [];
+    arr.push(contentType.parse(this.type).type);
+    return arr;
   }
 
   /**
