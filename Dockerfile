@@ -1,41 +1,31 @@
 #Dockerfile for fragment microservice
 
-# Use node version 16.15.1
-FROM node:16.15.1
+# STAGE 0
+FROM node:16.15.1@sha256:a13d2d2aec7f0dae18a52ca4d38b592e45a45cc4456ffab82e5ff10d8a53d042 AS dependencies
 
 LABEL maintainer="Aditya Rahman <arahman27@myseneca.ca>"
 LABEL description="Fragments node.js microservice"
 
-# We default to use port 8080 in our service
+ENV NODE_ENV=production
+
 ENV PORT=8080
 
-# Reduce npm spam when installing within Docker
-# https://docs.npmjs.com/cli/v8/using-npm/config#loglevel
 ENV NPM_CONFIG_LOGLEVEL=warn
 
-# Disable colour when run inside Docker
-# https://docs.npmjs.com/cli/v8/using-npm/config#color
 ENV NPM_CONFIG_COLOR=false
 
-# Use /app as our working directory
 WORKDIR /app
 
-# Option 3: explicit filenames - Copy the package.json and package-lock.json
-# files into the working dir (/app), using full paths and multiple source
-# files.  All of the files will be copied into the working dir `./app`
 COPY package.json package-lock.json ./
 
-# Install node dependencies defined in package-lock.json
-RUN npm install
+RUN npm ci --production
 
-# Copy src to /app/src/
-COPY ./src ./src
+COPY --from=dependencies ./src ./src
 
-# Copy our HTPASSWD file
 COPY ./tests/.htpasswd ./tests/.htpasswd
 
-# Start the container by running our server
 CMD npm start
 
-# We run our service on port 8080
 EXPOSE 8080
+
+########################################################################################
