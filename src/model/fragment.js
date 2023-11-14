@@ -15,7 +15,7 @@ const {
 } = require('./data');
 
 class Fragment {
-  constructor({ id, ownerId, created = new Date(), updated = new Date(), type, size = 0 }) {
+  constructor({ id, ownerId, created, updated, type, size = 0 }) {
       this.type = '';
       this.id = randomUUID();
 
@@ -23,7 +23,7 @@ class Fragment {
         throw new Error();
       }
       else{
-        if(type === 'text/plain' || type === 'text/plain; charset=utf-8'){
+        if(Fragment.isSupportedType(type)){
           this.type = type;
         }
         else{
@@ -44,8 +44,10 @@ class Fragment {
 
         this.ownerId = ownerId;
         this.size = size;
-        this.created = created.toString();
-        this.updated = updated.toString();
+        this.created = created || new Date().toString();
+        this.updated = updated || new Date().toString();
+
+        this.save();
       }
   }
 
@@ -56,14 +58,8 @@ class Fragment {
    * @returns Promise<Array<Fragment>>
    */
   static async byUser(ownerId, expand = false) {
-    const fragments = await listFragments(ownerId, expand);
+    return listFragments(ownerId, expand)
 
-    if (fragments.size == 0){
-      return [];
-    }
-    else{
-      return Array.from(fragments.values());
-    }
   }
 
   /**
@@ -73,13 +69,13 @@ class Fragment {
    * @returns Promise<Fragment>
    */
   static async byId(ownerId, id) {
-    const res =  await readFragment(ownerId, id);
+    const fragment =  await readFragment(ownerId, id);
 
-    if(res == undefined){
+    if(!fragment){
       throw new Error;
     }
     else{
-      return res;
+      return Promise.resolve(fragment);
     }
   }
 
@@ -90,7 +86,8 @@ class Fragment {
    * @returns Promise<void>
    */
   static delete(ownerId, id) {
-    deleteFragment(ownerId, id);
+    return deleteFragment(ownerId, id);
+
   }
 
   /**
@@ -99,7 +96,8 @@ class Fragment {
    */
   save() {
     this.updated = new Date().toString();
-    writeFragment(this);
+    return writeFragment(this);
+
   }
 
   /**
@@ -108,6 +106,7 @@ class Fragment {
    */
   getData() {
     return readFragmentData(this.ownerId, this.id);
+
   }
 
   /**
@@ -116,14 +115,18 @@ class Fragment {
    * @returns Promise<void>
    */
   async setData(data) {
-    if (data == null){
-      throw new Error();
+    if (Buffer.isBuffer(data)){
+      this.size = Buffer.byteLength(data);
+      this.updated = new Date().toString();
+      this.save();
+
+      return writeFragmentData(this.ownerId, this.id, data);
+
     }
+    else{
+      throw new Error();
 
-    this.size++;
-    this.updated = new Date().toString();
-
-    await writeFragmentData(this.ownerId, this.id, data);
+    }
   }
 
   /**
@@ -133,7 +136,8 @@ class Fragment {
    */
   get mimeType() {
     const { type } = contentType.parse(this.type);
-    return type;
+    return type.toString();
+
   }
 
   /**
@@ -141,7 +145,7 @@ class Fragment {
    * @returns {boolean} true if fragment's type is text/*
    */
   get isText() {
-    if (this.type === 'text/plain' || this.type === 'text/plain; charset=utf-8'){
+    if (this.type.includes('text/')){
       return true;
     }
     else{
@@ -157,6 +161,7 @@ class Fragment {
     const arr = [];
     arr.push(contentType.parse(this.type).type);
     return arr;
+
   }
 
   /**
@@ -165,7 +170,15 @@ class Fragment {
    * @returns {boolean} true if we support this Content-Type (i.e., type/subtype)
    */
   static isSupportedType(value) {
-    if (value === 'text/plain' || value === 'text/plain; charset=utf-8'){
+    const validTypes = [
+      `text/plain`,
+      'text/plain; charset=utf-8',
+      `text/markdown`,
+      `text/html`,
+      `application/json`,
+    ];
+
+    if (validTypes.includes(value)){
       return true;
     }
     else{

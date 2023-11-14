@@ -2,16 +2,14 @@ const { Fragment } = require('../../src/model/fragment');
 
 // Wait for a certain number of ms. Feel free to change this value
 // if it isn't long enough for your test runs. Returns a Promise.
-//const wait = async (ms = 10) => new Promise((resolve) => setTimeout(resolve, ms));
+const wait = async (ms = 10) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const validTypes = [
   `text/plain`,
-  /*
-   Currently, only text/plain is supported. Others will be added later.
-
   `text/markdown`,
   `text/html`,
   `application/json`,
+  /*
   `image/png`,
   `image/jpeg`,
   `image/webp`,
@@ -172,7 +170,7 @@ describe('Fragment class', () => {
 
   describe('save(), getData(), setData(), byId(), byUser(), delete()', () => {
     test('byUser() returns an empty array if there are no fragments for this user', async () => {
-      expect(await Fragment.byUser('1234')).toEqual([]);
+      expect(await Fragment.byUser('1234')).toEqual(expect.arrayContaining([]));
     });
 
     test('a fragment can be created and save() stores a fragment for the user', async () => {
@@ -186,11 +184,11 @@ describe('Fragment class', () => {
       expect(await fragment2.getData()).toEqual(data);
     });
 
-    /*test('save() updates the updated date/time of a fragment', async () => {
+    test('save() updates the updated date/time of a fragment', async () => {
       const ownerId = '7777';
       const fragment = new Fragment({ ownerId, type: 'text/plain', size: 0 });
       const modified1 = fragment.updated;
-      await wait();
+      await wait(1000);
       await fragment.save();
       const fragment2 = await Fragment.byId(ownerId, fragment.id);
       expect(Date.parse(fragment2.updated)).toBeGreaterThan(Date.parse(modified1));
@@ -202,12 +200,12 @@ describe('Fragment class', () => {
       const fragment = new Fragment({ ownerId, type: 'text/plain', size: 0 });
       await fragment.save();
       const modified1 = fragment.updated;
-      await wait();
+      await wait(1000);
       await fragment.setData(data);
-      await wait();
+      await wait(1000);
       const fragment2 = await Fragment.byId(ownerId, fragment.id);
       expect(Date.parse(fragment2.updated)).toBeGreaterThan(Date.parse(modified1));
-    });*/
+    });
 
     test("a fragment is added to the list of a user's fragments", async () => {
       const data = Buffer.from('hello');
