@@ -32,10 +32,6 @@ app.use(cors());
 // Use gzip/deflate compression middleware
 app.use(compression());
 
-// Set up our passport authentication middleware
-passport.use(authenticate.strategy());
-app.use(passport.initialize());
-
 // Define our routes
 app.use('/', require('./routes'));
 
@@ -49,6 +45,13 @@ app.use((req, res) => {
     },
   });
 });
+
+// Set up our passport authentication middleware
+passport.use(authenticate.strategy());
+app.use(passport.initialize());
+
+// Define our routes
+app.use('/', require('./routes'));
 
 // Add error-handling middleware to deal with anything else
 // eslint-disable-next-line no-unused-vars

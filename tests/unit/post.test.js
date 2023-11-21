@@ -15,7 +15,7 @@ describe('POST /v1/fragments', () => {
   // Using a valid username/password pair should give a success result with a .fragments array
   test('authenticated users posts', async () => {
     const res = await request(app).post('/v1/fragments').auth('user1@email.com', 'password1').send('fragment').set('content-type', 'text/plain');
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(201);
     expect(res.body.status).toBe('ok');
     expect(res.body.fragments != null).toBe(true);
   });

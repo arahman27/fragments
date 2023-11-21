@@ -23,9 +23,11 @@ module.exports = (strategyName) => {
         return next(createErrorResponse(500, 'Unable to authenticate user'));
       }
 
+      console.log("The email is: " + email + "\n");
+
       // Not authorized, return a 401
       if (!email) {
-        return res.status(401).json(createErrorResponse(401, 'Unauthorized'));
+        return res.status(401).json(createErrorResponse(401, 'Unauthorized email' + email));
       }
 
       // Authorized. Hash the user's email, attach to the request, and continue
