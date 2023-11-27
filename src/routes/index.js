@@ -11,6 +11,8 @@ const router = express.Router();
 // Our authentication middleware
 const { authenticate } = require('../auth');
 
+const { hostname } = require('os');
+
 /**
  * Expose all of our API routes on /v1/* to include an API version.
  */
@@ -30,6 +32,7 @@ router.get('/', (req, res) => {
     // Use your own GitHub URL for this!
     githubUrl: 'https://github.com/arahman27/fragments',
     version,
+    hostname: hostname(),
   });
 });
 
