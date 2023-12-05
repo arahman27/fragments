@@ -91,12 +91,12 @@ jobs:
           # a few to get you started, but you should fill in the rest yourself.
           environment-variables: |
             LOG_LEVEL=info
-            NODE_ENV=production
             PORT=8080
             AWS_COGNITO_POOL_ID=us-east-1_R0lpx08au
             AWS_COGNITO_CLIENT_ID=18aqq2orpn3aersgpflvi38gjg
             API_URL=EC2Con-EcsEl-gl0X3lN4nuB3-1358069971.us-east-1.elb.amazonaws.com:8080/
             AWS_S3_BUCKET_NAME=arahman27-fragments
+            AWS_DYNAMODB_TABLE_NAME=fragments
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
