@@ -6,8 +6,6 @@ FROM node:16.15.1@sha256:a13d2d2aec7f0dae18a52ca4d38b592e45a45cc4456ffab82e5ff10
 LABEL maintainer="Aditya Rahman <arahman27@myseneca.ca>"
 LABEL description="Fragments node.js microservice"
 
-ENV NODE_ENV=production
-
 ENV PORT=8080
 
 ENV NPM_CONFIG_LOGLEVEL=warn
