@@ -27,7 +27,9 @@ app.use(pino);
 app.use(helmet());
 
 // Use CORS middleware so we can make requests across origins
-app.use(cors({origin: 'http://localhost:1234'}));
+app.use(cors({origin: '*'}));
+
+app.use(cors({methods: ['GET', 'POST', 'PUT', 'DELETE']}));
 
 // Use gzip/deflate compression middleware
 app.use(compression());
