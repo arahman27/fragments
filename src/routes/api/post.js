@@ -3,9 +3,6 @@
 const crypto = require('crypto');
 const { Fragment } = require('../../model/fragment');
 
-/**
- * Get a list of fragments for the current user
- */
 module.exports = async (req, res) => {
   if (Buffer.isBuffer(req.body) && Fragment.isSupportedType(req.headers['content-type'])) {
     const id = crypto.randomUUID().toString('hex');

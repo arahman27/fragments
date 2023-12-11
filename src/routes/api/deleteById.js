@@ -1,4 +1,4 @@
-// src/routes/api/getInfo.js
+// src/routes/api/delete.js
 
 const crypto = require('crypto');
 const { Fragment } = require('../../model/fragment');
@@ -8,14 +8,13 @@ module.exports = async (req, res) => {
   const idList = await Fragment.byUser(user);
 
   if(idList.includes(req.params.id)){
-    const findFragment = await Fragment.byId(user, req.params.id);
+    await Fragment.delete(user, req.params.id);
 
-    if (findFragment) {
-      res.status(201).json({
-        status: 'ok',
-        fragment: findFragment,
-      });
-    }
+    res.status(201).json({
+      status: 'ok',
+      message: `The fragment was deleted. [ Fragment ID: ${req.params.id} ]`,
+    });
+
   }
   else{
     res.status(401).json({

@@ -31,6 +31,10 @@
           "value": "http://localhost:8080"
         },
         {
+          "name": "HTPASSWD_FILE",
+          "value": "tests/.htpasswd"
+        },
+        {
           "name": "AWS_COGNITO_CLIENT_ID",
           "value": "18aqq2orpn3aersgpflvi38gjg"
         },

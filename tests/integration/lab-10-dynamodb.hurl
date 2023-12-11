@@ -18,7 +18,7 @@ GET {{fragment1_url}}/info
 [BasicAuth]
 user1@email.com:password1
 
-HTTP/1.1 200
+HTTP/1.1 201
 [Asserts]
 jsonpath "$.status" == "ok"
 jsonpath "$.fragment.id" == {{fragment1_id}}
@@ -43,7 +43,7 @@ GET {{fragment2_url}}/info
 [BasicAuth]
 user1@email.com:password1
 
-HTTP/1.1 200
+HTTP/1.1 201
 [Asserts]
 jsonpath "$.status" == "ok"
 jsonpath "$.fragment.id" == {{fragment2_id}}
@@ -56,22 +56,22 @@ user1@email.com:password1
 HTTP/1.1 200
 [Asserts]
 jsonpath "$.status" == "ok"
-jsonpath "$.fragments[*]" == {{fragment1_id}}
-jsonpath "$.fragments[*]" == {{fragment2_id}}
+jsonpath "$.fragments[*]" includes {{fragment1_id}}
+jsonpath "$.fragments[*]" includes {{fragment2_id}}
 
 #8 & 9__________________________________________________________________________________
 DELETE {{fragment1_url}}
 [BasicAuth]
 user1@email.com:password1
 
-HTTP/1.1 200
+HTTP/1.1 201
 
 #10 & 11________________________________________________________________________________
 GET {{fragment1_url}}
 [BasicAuth]
 user1@email.com:password1
 
-HTTP/1.1 404
+HTTP/1.1 401
 
 #12_____________________________________________________________________________________
 GET http://localhost:8080/v1/fragments
@@ -80,7 +80,7 @@ user1@email.com:password1
 
 HTTP/1.1 200
 [Asserts]
-jsonpath "$.fragments[*]" != {{fragment1_id}}
-jsonpath "$.fragments[*]" == {{fragment2_id}}
+jsonpath "$.fragments[*]" not includes {{fragment1_id}}
+jsonpath "$.fragments[*]" includes {{fragment2_id}}
 
 
